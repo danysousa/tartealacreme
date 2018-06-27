@@ -12,7 +12,7 @@ tarteaucitron.lang = {
     "alertSmall": "Gestione dei servizi",
     "acceptAll": "Ok, accetta tutto",
     "personalize": "Personalizza",
-    "close": "Chiudi",
+    "close": "x",
     
     "all": "Preferenze per tutti i servizi",
     

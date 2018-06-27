@@ -12,7 +12,7 @@ tarteaucitron.lang = {
     "alertSmall": "Spravovat služby",
     "personalize": "Přizpůsobit",
     "acceptAll": "OK, přijmout vše",
-    "close": "Zavřít",
+    "close": "x",
     
     "all": "Nastavení všech služeb",
 

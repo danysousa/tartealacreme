@@ -235,14 +235,14 @@ var tarteaucitron = {
                 html += '   <div id="tarteaucitronServices">';
                 html += '      <div class="tarteaucitronLine tarteaucitronMainLine" id="tarteaucitronMainLineOffset">';
                 html += '         <div class="tarteaucitronName">';
-                html += '            <b><a href="#" onclick="tarteaucitron.userInterface.toggle(\'tarteaucitronInfo\', \'tarteaucitronInfoBox\');return false">&#10011;</a> ' + tarteaucitron.lang.all + '</b>';
+                html += '            <b><a href="#" onclick="tarteaucitron.userInterface.toggle(\'tarteaucitronInfo\', \'tarteaucitronInfoBox\');return false">+</a> ' + tarteaucitron.lang.all + '</b>';
                 html += '         </div>';
                 html += '         <div class="tarteaucitronAsk" id="tarteaucitronScrollbarAdjust">';
                 html += '            <div id="tarteaucitronAllAllowed" class="tarteaucitronAllow" onclick="tarteaucitron.userInterface.respondAll(true);">';
-                html += '               &#10003; ' + tarteaucitron.lang.allow;
+                html += '               ' + tarteaucitron.lang.allow;
                 html += '            </div> ';
                 html += '            <div id="tarteaucitronAllDenied" class="tarteaucitronDeny" onclick="tarteaucitron.userInterface.respondAll(false);">';
-                html += '               &#10007; ' + tarteaucitron.lang.deny;
+                html += '               ' + tarteaucitron.lang.deny;
                 html += '            </div>';
                 html += '         </div>';
                 html += '      </div>';
@@ -258,7 +258,7 @@ var tarteaucitron = {
                 for (i = 0; i < cat.length; i += 1) {
                     html += '         <div id="tarteaucitronServicesTitle_' + cat[i] + '" class="tarteaucitronHidden">';
                     html += '            <div class="tarteaucitronTitle">';
-                    html += '               <a href="#" onclick="tarteaucitron.userInterface.toggle(\'tarteaucitronDetails' + cat[i] + '\', \'tarteaucitronInfoBox\');return false">&#10011;</a> ' + tarteaucitron.lang[cat[i]].title;
+                    html += '               <a href="#" onclick="tarteaucitron.userInterface.toggle(\'tarteaucitronDetails' + cat[i] + '\', \'tarteaucitronInfoBox\');return false">+</a> ' + tarteaucitron.lang[cat[i]].title;
                     html += '            </div>';
                     html += '            <div id="tarteaucitronDetails' + cat[i] + '" class="tarteaucitronDetails tarteaucitronInfoBox">';
                     html += '               ' + tarteaucitron.lang[cat[i]].details;
@@ -290,7 +290,7 @@ var tarteaucitron = {
                     html += '       ' + tarteaucitron.lang.alertBigClick + ' ' + tarteaucitron.lang.alertBig;
                     html += '   </span>';
                     html += '   <span id="tarteaucitronPersonalize" onclick="tarteaucitron.userInterface.respondAll(true);">';
-                    html += '       &#10003; ' + tarteaucitron.lang.acceptAll;
+                    html += '       ' + tarteaucitron.lang.acceptAll;
                     html += '   </span>';
                     html += '   <span id="tarteaucitronCloseAlert" onclick="tarteaucitron.userInterface.openPanel();">';
                     html += '       ' + tarteaucitron.lang.personalize;
@@ -431,10 +431,10 @@ var tarteaucitron = {
             html += '   </div>';
             html += '   <div class="tarteaucitronAsk">';
             html += '       <div id="' + service.key + 'Allowed" class="tarteaucitronAllow" onclick="tarteaucitron.userInterface.respond(this, true);">';
-            html += '           &#10003; ' + tarteaucitron.lang.allow;
+            html += '           ' + tarteaucitron.lang.allow;
             html += '       </div> ';
             html += '       <div id="' + service.key + 'Denied" class="tarteaucitronDeny" onclick="tarteaucitron.userInterface.respond(this, false);">';
-            html += '           &#10007; ' + tarteaucitron.lang.deny;
+            html += '           ' + tarteaucitron.lang.deny;
             html += '       </div>';
             html += '   </div>';
             html += '</div>';
@@ -516,8 +516,45 @@ var tarteaucitron = {
     "userInterface": {
         "css": function (id, property, value) {
             "use strict";
+
+            console.log(id, property, value);
+
             if (document.getElementById(id) !== null) {
                 document.getElementById(id).style[property] = value;
+            }
+        },
+
+        "addClass": function (id, className) {
+            "use strict";
+
+            if (document.getElementById(id) !== null) {
+                var element, arr;
+
+                const opposedClass = {
+                    "border-left-green": ["border-left-red"],
+                    "border-left-red": ["border-left-green"],
+                    "background-gray" : ["background-red", "background-green"],
+                    "background-red" : ["background-gray" ,"background-green"],
+                    "background-green" : ["background-gray" ,"background-red"]
+                };
+
+                element = document.getElementById(id);
+
+                arr = element.className.split(" ");
+
+                if (className in opposedClass) {
+                    opposedClass[className].forEach(function(classToDelete, index) {
+                        if (arr.indexOf(classToDelete) !== -1) {
+                            element.className.replace(classToDelete, "");
+                        }
+                    });
+                }
+
+                arr = element.className.split(" ");
+
+                if (arr.indexOf(className) === -1) {
+                    element.className += " " + className;
+                }
             }
         },
         "respondAll": function (status) {
@@ -543,6 +580,7 @@ var tarteaucitron = {
                     tarteaucitron.userInterface.color(key, status);
                 }
             }
+            tarteaucitron.userInterface.closePanel();
         },
         "respond": function (el, status) {
             "use strict";
@@ -584,13 +622,13 @@ var tarteaucitron = {
                 index;
 
             if (status === true) {
-                tarteaucitron.userInterface.css(key + 'Line', 'borderLeft', '5px solid ' + greenDark);
-                tarteaucitron.userInterface.css(key + 'Allowed', 'backgroundColor', greenDark);
-                tarteaucitron.userInterface.css(key + 'Denied', 'backgroundColor', gray);
+                tarteaucitron.userInterface.addClass(key + 'Line', 'border-left-green');
+                tarteaucitron.userInterface.addClass(key + 'Allowed', 'background-green');
+                tarteaucitron.userInterface.addClass(key + 'Denied', 'background-gray');
             } else if (status === false) {
-                tarteaucitron.userInterface.css(key + 'Line', 'borderLeft', '5px solid ' + redDark);
-                tarteaucitron.userInterface.css(key + 'Allowed', 'backgroundColor', gray);
-                tarteaucitron.userInterface.css(key + 'Denied', 'backgroundColor', redDark);
+                tarteaucitron.userInterface.addClass(key + 'Line', 'border-left-red');
+                tarteaucitron.userInterface.addClass(key + 'Allowed', 'background-gray');
+                tarteaucitron.userInterface.addClass(key + 'Denied', 'background-red');
             }
 
             // check if all services are allowed
@@ -609,14 +647,14 @@ var tarteaucitron = {
             tarteaucitron.userInterface.css(c + 'DotRed', 'width', ((100 / sum) * nbDenied) + '%');
             
             if (nbDenied === 0 && nbPending === 0) {
-                tarteaucitron.userInterface.css(c + 'AllAllowed', 'backgroundColor', greenDark);
-                tarteaucitron.userInterface.css(c + 'AllDenied', 'backgroundColor', gray);
+                tarteaucitron.userInterface.addClass(c + 'AllAllowed', 'background-green');
+                tarteaucitron.userInterface.addClass(c + 'AllDenied', 'background-gray');
             } else if (nbAllowed === 0 && nbPending === 0) {
-                tarteaucitron.userInterface.css(c + 'AllAllowed', 'backgroundColor', gray);
-                tarteaucitron.userInterface.css(c + 'AllDenied', 'backgroundColor', redDark);
+                tarteaucitron.userInterface.addClass(c + 'AllAllowed','background-gray');
+                tarteaucitron.userInterface.addClass(c + 'AllDenied','background-red');
             } else {
-                tarteaucitron.userInterface.css(c + 'AllAllowed', 'backgroundColor', gray);
-                tarteaucitron.userInterface.css(c + 'AllDenied', 'backgroundColor', gray);
+                tarteaucitron.userInterface.addClass(c + 'AllAllowed','background-gray');
+                tarteaucitron.userInterface.addClass(c + 'AllDenied', 'background-gray');
             }
             
             // close the alert if all service have been reviewed
@@ -1236,7 +1274,7 @@ var tarteaucitron = {
         html += '   <div class="tac_float">';
         html += '      <b>' + tarteaucitron.services[id].name + '</b> ' + tarteaucitron.lang.fallback;
         html += '      <div class="tarteaucitronAllow" id="Eng' + r + 'ed' + id + '" onclick="tarteaucitron.userInterface.respond(this, true);">';
-        html += '          &#10003; ' + tarteaucitron.lang.allow;
+        html += '          ' + tarteaucitron.lang.allow;
         html += '       </div>';
         html += '   </div>';
         html += '</div>';
