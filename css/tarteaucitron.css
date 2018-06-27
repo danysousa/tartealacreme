@@ -183,13 +183,8 @@
 #tarteaucitron #tarteaucitronServices .tarteaucitronMainLine .tarteaucitronName a,
 #tarteaucitron #tarteaucitronServices .tarteaucitronTitle a {
     color: #6FA9E1;
-    font-weight: 500;
-    padding-left: .4em;
-    padding-right: .4em;
-    padding-bottom: .2em;
-    border-radius: 50%;
+    font-weight: 900;
     background-color: #C5DCF3;
-    border: 3px solid #C5DCF3;
     margin-right: .5em;
 }
 
