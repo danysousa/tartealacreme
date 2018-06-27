@@ -517,8 +517,6 @@ var tarteaucitron = {
         "css": function (id, property, value) {
             "use strict";
 
-            console.log(id, property, value);
-
             if (document.getElementById(id) !== null) {
                 document.getElementById(id).style[property] = value;
             }
